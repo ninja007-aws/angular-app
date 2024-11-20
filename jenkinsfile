@@ -1,40 +1,45 @@
 pipeline {
     agent any
-
-    environment {
-        NODEJS_HOME = tool name: 'Node 22', type: 'NodeJSInstallation' // 
-        PATH = "${env.NODEJS_HOME}/bin:${env.PATH}"
+    tools {
+        NodeJS 'node'
     }
-
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/ninja007/angular-app.git'
+                git branch: 'master', url: 'https://github.com/ninja007-aws/angular-app.git'
             }
         }
-
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                script {
+                    sh 'npm install'
+                }
             }
         }
-
+        stage('Install Angular CLI') {
+            steps {
+                script {
+                    sh 'npm install -g @angular/cli@latest'
+                }
+            }
+        }
         stage('Build Angular App') {
             steps {
-                bat 'ng build --prod --output-path C:\\nginx\\html'
+                script {
+                    sh 'ng build --prod'
+                }
             }
         }
-
-        stage('Deploy') {
+        stage('Deploy to Nginx') {
             steps {
-                echo 'Deployment complete. Restarting NGINX to serve the new build.'
-                bat 'nginx -s reload'  // Reload Nginx to serve the new content
+                script {
+                    sh 'cp -R dist/* /path/to/nginx/deployment/folder/'
+                }
             }
         }
     }
-
     post {
-        node {
+        always {
             cleanWs()
         }
     }
