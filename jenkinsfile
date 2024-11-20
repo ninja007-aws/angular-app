@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         NODEJS_HOME = tool name: 'node 18', type: 'NodeJSInstallation'
-        PATH = "${env.node 18_HOME}/bin:${env.PATH}"
+        PATH = "${env.NODEJS_HOME}/bin:${env.PATH}"
     }
 
     stages {
