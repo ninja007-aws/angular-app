@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        NODEJS_HOME = tool name: 'Node 18', type: 'NodeJSInstallation'  // Reference the correct Node version
+        NODEJS_HOME = tool name: 'Node 18', type: 'NodeJSInstallation'
         PATH = "${env.NODEJS_HOME}/bin:${env.PATH}"
     }
 
@@ -21,13 +21,14 @@ pipeline {
 
         stage('Build Angular App') {
             steps {
-                bat 'ng build --prod --output-path C:\\nginx\\html'  // Update the path if needed
+                bat 'ng build --prod --output-path C:\\nginx\\html'  // Ensure this path is correct
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deployment complete. Angular app is now served by NGINX.'
+                echo 'Deployment complete. Restarting NGINX to serve the new build.'
+                bat 'nginx -s reload'  // Reload Nginx to serve the new content
             }
         }
     }
