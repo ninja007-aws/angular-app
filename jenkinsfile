@@ -9,37 +9,25 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://gitlab.com/your-repo/your-project.git'
+                git branch: 'main', url: 'https://github.com/ninja007-aws/angular-app.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Build Angular App') {
             steps {
-                sh 'ng build --prod'
+                bat 'ng build --prod --output-path C:/nginx/html'
             }
         }
 
         stage('Deploy') {
             steps {
-                sshPublisher(
-                    publishers: [
-                        sshPublisherDesc(
-                            configName: 'YourServerConfig',
-                            transfers: [
-                                sshTransfer(
-                                    sourceFiles: 'dist/**/*',
-                                    remoteDirectory: '/var/www/html/your-angular-app'
-                                )
-                            ]
-                        )
-                    ]
-                )
+                echo 'Deployment to local NGINX folder is complete.'
             }
         }
     }
