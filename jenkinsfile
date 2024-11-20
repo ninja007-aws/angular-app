@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        NODEJS_HOME = tool name: 'NodeJS', type: 'NodeJSInstallation'
-        PATH = "${env.NODEJS_HOME}/bin:${env.PATH}"
+        NODEJS_HOME = tool name: 'node 18', type: 'NodeJSInstallation'
+        PATH = "${env.node 18_HOME}/bin:${env.PATH}"
     }
 
     stages {
